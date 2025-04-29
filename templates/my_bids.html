@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="/static/css/buyer.css">
+    <script src="/static/js/main.js"></script>
+</head>
+<body>
+    <div class="my-bids-container">
+        <div class="bids-header">
+            <h1 class="page-title">My Bids</h1>
+            <p class="page-description">Track and manage your bids on agricultural products</p>
+        </div>
+    
+        <div class="bids-tabs">
+            <button class="tab-button active" data-tab="active">Active Bids</button>
+            <button class="tab-button" data-tab="past">Past Bids</button>
+        </div>
+    
+        <div class="tab-content active" id="active-bids">
+            {% if active_bids %}
+                <div class="bids-grid">
+                    {% for bid in active_bids %}
+                    <div class="bid-card">
+                        <div class="product-image">
+                            <img src="{{ bid.product.image.url }}" alt="{{ bid.product.name }}">
+                        </div>
+                        <div class="bid-details">
+                            <h3 class="product-name">{{ bid.product.name }}</h3>
+                            
+                            <div class="detail-row">
+                                <span class="label">Your Bid:</span>
+                                <span class="value">₹{{ bid.offered_price }} for {{ bid.quantity }} units</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="label">Market Price:</span>
+                                <span class="value">₹{{ bid.product.price }}</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="label">Farmer:</span>
+                                <span class="value">{{ bid.product.farmer.username }}</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="label">Bid Date:</span>
+                                <span class="value">{{ bid.timestamp|date:"d M, Y" }}</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="label">Status:</span>
+                                <span class="status-badge {{ bid.status|lower }}">{{ bid.status }}</span>
+                            </div>
+    
+                            <div class="bid-actions">
+                                <button class="edit-btn" data-bid-id="{{ bid.id }}" data-price="{{ bid.price }}" data-quantity="{{ bid.quantity }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                    </svg>
+                                    Edit
+                                </button>
+                                <button class="remove-btn" data-bid-id="{{ bid.id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                    </svg>
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-bids-message">
+                    <p>You don't have any active bids at the moment.</p>
+                    <a href="{% url 'buyer' %}" class="browse-btn">Browse Products</a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="tab-content" id="past-bids">
+            {% if past_bids %}
+                <div class="bids-grid">
+                    {% for bid in past_bids %}
+                    <div class="bid-card">
+                        <div class="product-image">
+                            <img src="{{ bid.product.image.url }}" alt="{{ bid.product.name }}">
+                        </div>
+                        <div class="bid-details">
+                            <h3 class="product-name">{{ bid.product.name }}</h3>
+                            
+                            <div class="detail-row">
+                                <span class="label">Your Bid:</span>
+                                <span class="value">₹{{ bid.offered_price }} for {{ bid.quantity }} units</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="label">Market Price:</span>
+                                <span class="value">₹{{ bid.product.price }}</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="label">Farmer:</span>
+                                <span class="value">{{ bid.product.farmer.username }}</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="label">Bid Date:</span>
+                                <span class="value">{{ bid.timestamp|date:"d M, Y" }}</span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="label">Status:</span>
+                                <span class="status-badge {{ bid.status|lower }}">{{ bid.status }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-bids-message">
+                    <p>You don't have any past bids.</p>
+                    <a href="{% url 'buyer' %}" class="browse-btn">Browse Products</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Edit Bid Modal -->
+    <div id="edit-bid-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Your Bid</h2>
+            <form id="edit-bid-form" method="post" action="{% url 'edit_bid' %}">
+                {% csrf_token %}
+                <input type="hidden" id="edit-bid-id" name="bid_id">
+                
+                <div class="form-group">
+                    <label for="edit-price">Price (₹):</label>
+                    <input type="number" id="edit-price" name="price" min="1" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-quantity">Quantity (units):</label>
+                    <input type="number" id="edit-quantity" name="quantity" min="1" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Update Bid</button>
+                    <button type="button" class="cancel-btn close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Remove Bid Confirmation Modal -->
+    <div id="remove-bid-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Confirm Removal</h2>
+            <p>Are you sure you want to remove this bid? This action cannot be undone.</p>
+            <form id="remove-bid-form" method="post" action="{% url 'remove_bid' %}">
+                {% csrf_token %}
+                <input type="hidden" id="remove-bid-id" name="bid_id">
+                
+                <div class="form-actions">
+                    <button type="submit" class="delete-btn">Remove Bid</button>
+                    <button type="button" class="cancel-btn close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+{% endblock content %}
+
+

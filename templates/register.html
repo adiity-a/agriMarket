@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/static/js/location.js"></script>
+</head>
+<body>
+
+    <div class="container-fluid p-0 vh-100">
+        <div class="row g-0 h-100">
+            <div class="col-md-6 d-flex flex-column justify-content-center p-4 p-md-5">
+                <div class="mb-4">
+                    <h2 class="fw-bold">Welcome to AgriMarket</h2>
+                </div>
+                
+                <!-- Form content -->
+                <div class="mb-5">
+                    <h1 class="display-5 fw-bold mb-2">Register now</h1>
+                    <p class="text-muted">Create a free account</p>
+                </div>
+                
+                <!-- Registration form -->
+                <form method="POST" class="mb-4" id="edit-form">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Username</label>
+                        {{ form.username }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email address</label>
+                        {{ form.email }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label">Password</label>
+                        {{ form.password1 }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password2" class="form-label">Repeat password</label>
+                        {{ form.password2 }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Select Role</label>
+                        {% for radio in form.role %}
+                            <div class="form-check">
+                                {{ radio.tag }}
+                                <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                    {{ radio.choice_label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" id="id_lat" name="lat">
+                    <input type="hidden" id="id_lng" name="lng">
+                    
+                    <!-- Display form errors -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Success message -->
+                    {% if msg %}
+                        <div class="alert alert-success">{{ msg }}</div>
+                    {% endif %}
+                    
+                    <button type="submit" class="btn btn-dark w-100 py-2 mt-3">Register</button>
+                </form>
+                
+                <!-- Already have account link -->
+                <div class="text-center">
+                    <p>Already have an account? <a href="{% url 'login' %}" class="text-decoration-none text-primary">Login</a></p>
+                </div>
+            </div>
+            
+            <!-- Right side - Image and tagline -->
+            <div class="col-md-6 d-none d-md-block position-relative">
+                <div class="bg-image h-100" style="background-image: url('https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'); background-size: cover; background-position: center;">
+                    <div class="h-100 d-flex flex-column justify-content-end p-5 text-white" style="background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0) 100%);">
+                        <h2 class="display-4 fw-bold mb-3">Bring fresh produce to market.</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+{% endblock content %}
+

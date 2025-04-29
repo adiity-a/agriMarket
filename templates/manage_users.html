@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="/static/css/admin/manage_users.css">
+    <script src="/static/js/admin/manage_users.js"></script>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="page-title">Manage Users</h1>
+            <button class="btn btn-outline-secondary" onclick="window.location.href='{% url 'admin' %}'">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            </button>
+        </div>
+    
+        <div class="row g-4">
+            <!-- Farmers Panel -->
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="m-0">
+                                <i class="bi bi-person-badge me-2"></i>Farmers
+                            </h3>
+                            <span class="badge bg-light text-dark">
+                                {% with normal_farmers=farmers %}
+                                    {{ normal_farmers|length }}
+                                {% endwith %}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            {% for farmer in farmers %}
+                                {% if not farmer.is_superuser %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="user-info">
+                                        <h5 class="mb-1">{{ farmer.username }}</h5>
+                                        {% comment %} <p class="mb-0 text-muted small">
+                                            <i class="bi bi-geo-alt me-1"></i>{{ farmer.location|default:"No location" }}
+                                        </p> {% endcomment %}
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button type="button" class="btn btn-sm btn-outline-danger delete-user-btn" 
+                                                data-username="{{ farmer.username }}"
+                                                data-user-id="{{ farmer.id }}"
+                                                data-user-type="farmer">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% empty %}
+                                <div class="list-group-item text-center text-muted py-4">
+                                    <i class="bi bi-emoji-frown display-6"></i>
+                                    <p class="mt-2">No farmers registered yet</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Buyers Panel -->
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="m-0">
+                                <i class="bi bi-cart4 me-2"></i>Buyers
+                            </h3>
+                            <span class="badge bg-light text-dark">
+                                {% with normal_buyers=buyers %}
+                                    {{ normal_buyers|length }}
+                                {% endwith %}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            {% for buyer in buyers %}
+                                {% if not buyer.is_superuser %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="user-info">
+                                        <h5 class="mb-1">{{ buyer.username }}</h5>
+                                        {% comment %} <p class="mb-0 text-muted small">
+                                            <i class="bi bi-geo-alt me-1"></i>{{ buyer.location|default:"No location" }}
+                                        </p> {% endcomment %}
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button type="button" class="btn btn-sm btn-outline-danger delete-user-btn" 
+                                                data-username="{{ buyer.username }}"
+                                                data-user-id="{{ buyer.id }}"
+                                                data-user-type="buyer">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% empty %}
+                                <div class="list-group-item text-center text-muted py-4">
+                                    <i class="bi bi-emoji-frown display-6"></i>
+                                    <p class="mt-2">No buyers registered yet</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User summary -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                    <div>
+                        {% with normal_farmers_len=farmers|length normal_buyers_len=buyers|length %}
+                        Total users: {{ normal_farmers_len|add:normal_buyers_len }} 
+                        ({{ normal_farmers_len }} farmers and {{ normal_buyers_len }} buyers)
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Toast container for notifications -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+    </div>
+    
+    <!-- Delete User Confirmation Modal -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteUserModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Confirm Deletion
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <span id="deleteUserName" class="fw-bold"></span>?</p>
+                    <p class="text-danger mb-0"><small>This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteUserForm" method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

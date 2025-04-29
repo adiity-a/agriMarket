@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/css/admin/admin.css">
+</head>
+<body>
+    <div class="admin-dashboard">
+        <h1>Welcome, {{ user.username }} 👋</h1>
+        <p class="dashboard-subtitle">Here's a quick overview of the platform activity:</p>
+
+        <div class="dashboard-cards">
+            <div class="card">
+                <h2>{{ total_users }}</h2>
+                <p>Total Users</p>
+            </div>
+            <div class="card">
+                <h2>{{ total_farmers }}</h2>
+                <p>Farmers</p>
+            </div>
+            <div class="card">
+                <h2>{{ total_buyers }}</h2>
+                <p>Buyers</p>
+            </div>
+            <div class="card">
+                <h2>{{ total_products }}</h2>
+                <p>Products Listed</p>
+            </div>
+            <div class="card">
+                <h2>{{ total_bids }}</h2>
+                <p>Total Bids</p>
+            </div>
+            <div class="card">
+                <h2>{{ pending_bids }}</h2>
+                <p>Pending Bids</p>
+            </div>
+        </div>
+
+        <hr>
+        <p class="dashboard-note">Use the navbar above to manage users, products, or bids.</p>
+    </div>
+</body>
+
+{% endblock %}

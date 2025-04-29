@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Products</title>
+    <link rel="stylesheet" href="/static/css/admin/admin.css">
+    <script src="/static/js/admin/manage_products.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Manage Products</h1>
+            <a href="{% url 'admin' %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+        
+        <p class="text-muted mb-4">View and manage all agricultural products in the marketplace</p>
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0">Product List</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" id="productSearch" class="form-control" placeholder="Search products...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Farmer</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td style="width: 80px;">
+                                    {% if product.image %}
+                                    <img src="{{ product.image.url }}" class="img-thumbnail" alt="{{ product.name }}" style="height: 60px; width: 60px; object-fit: cover;">
+                                    {% else %}
+                                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 60px; width: 60px;">
+                                        <i class="bi bi-image text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td class="align-middle">{{ product.name }}</td>
+                                <td class="align-middle">{{ product.farmer.username }}</td>
+                                <td class="align-middle">₹{{ product.price }}</td>
+                                <td class="align-middle">{{ product.quantity }}</td>
+                                <td class="align-middle">
+                                    <div class="btn-group">
+                                        {% comment %} <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='{% url 'view_product' product.id %}'">
+                                            <i class="bi bi-eye"></i>
+                                        </button> {% endcomment %}
+                                        <form method="POST" action="{% url 'delete_product' product.id %}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete {{ product.name }}?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                        <a href="{% url 'edit-product' product.id %}" class="btn btn-sm btn-outline-warning">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center p-4">
+                                    <div class="text-muted">
+                                        <i class="bi bi-inbox-fill display-6"></i>
+                                        <p class="mt-2">No products found in the system</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}
+
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Product</title>
+</head>
+<body>
+    <div class="container d-flex justify-content-center py-5">
+        <div class="card shadow border-0" style="width: 500px;">
+            <div class="card-body p-4">
+                <h2 class="mb-2">Edit Product</h2>
+                <p class="text-muted mb-4">Update your product details on AgriMarket</p>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">Product Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.price.id_for_label }}" class="form-label">Price (₹)</label>
+                        {{ form.price }}
+                        {% if form.price.errors %}
+                            <div class="text-danger">{{ form.price.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.quantity.id_for_label }}" class="form-label">Quantity</label>
+                        {{ form.quantity }}
+                        {% if form.quantity.errors %}
+                            <div class="text-danger">{{ form.quantity.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="{{ form.image.id_for_label }}" class="form-label">Upload Image</label>
+                        <div class="input-group">
+                            {{ form.image }}
+                        </div>
+                        {% if form.image.errors %}
+                            <div class="text-danger">{{ form.image.errors }}</div>
+                        {% endif %}
+                        {% if product.image %}
+                            <div class="mt-2">
+                                <small class="text-muted">Current image: {{ product.image.name }}</small>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Additional fields if needed -->
+                    {% for field in form %}
+                        {% if field.name != 'name' and field.name != 'price' and field.name != 'quantity' and field.name != 'image' %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-dark w-100 py-2">Update Product</button>
+                    </div>
+                </form>
+                
+                <div class="mt-3 text-center">
+                    {% if role == "admin" %}
+                        <a href="{% url 'manage_products' %}" class="text-decoration-none">Back to Products</a>
+                    {% else %}
+                        <a href="{% url 'farmer' %}" class="text-decoration-none">Back to My Products</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+ {% endcomment %}

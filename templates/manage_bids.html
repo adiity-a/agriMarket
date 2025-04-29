@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Bids</title>
+    <link rel="stylesheet" href="/static/css/manage_bids.css">
+</head>
+<body>
+    <div class="container mt-4 mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Manage Bids</h1>
+            <a href="{% url 'admin' %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% for item in product_data %}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">{{ item.product.name }}</h5>
+                            <span class="badge bg-info">Farmer: {{ item.product.farmer.username }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>
+                                <span class="fw-bold">Price:</span> ₹{{ item.product.price }}
+                            </div>
+                            <div>
+                                <span class="fw-bold">Quantity:</span> {{ item.product.quantity }}
+                            </div>
+                        </div>
+                        
+                        {% if item.bids %}
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped manage-bids-table">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Buyer</th>
+                                            <th>Offered Price</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bid in item.bids %}
+                                            <tr>
+                                                <td>{{ bid.buyer.username }}</td>
+                                                <td>₹{{ bid.offered_price }}</td>
+                                                <td>{{ bid.quantity }}</td>
+                                                <td>
+                                                    {% if bid.status == "approved" %}
+                                                        <span class="badge bg-success">Approved</span>
+                                                    {% elif bid.status == "rejected" %}
+                                                        <span class="badge bg-danger">Rejected</span>
+                                                    {% elif bid.is_expired %}
+                                                        <span class="badge bg-secondary">Expired</span>
+                                                    {% else %}
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if bid.status == "pending" and not bid.is_expired %}
+                                                        <div class="btn-group btn-group-sm">
+                                                            <button type="submit" name="approve_bid" value="{{ bid.id }}" class="btn btn-outline-success">
+                                                                <i class="bi bi-check-lg"></i> Approve
+                                                            </button>
+                                                            <button type="submit" name="reject_bid" value="{{ bid.id }}" class="btn btn-outline-danger">
+                                                                <i class="bi bi-x-lg"></i> Reject
+                                                            </button>
+                                                        </div>
+                                                    {% else %}
+                                                        <button class="btn btn-sm btn-outline-secondary" disabled>No Actions</button>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>No bids for this product.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>No products with bids found.
+                </div>
+            {% endfor %}
+        </form>
+    </div>
+</body>
+
+{% endblock content %}

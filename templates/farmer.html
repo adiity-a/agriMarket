@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Products</title>
+    <link rel="stylesheet" href="/static/css/farmer.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+    <div class="container py-5">
+        <!-- Page Header with Action Button -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold text-dark">My Products</h1>
+                <p class="text-muted">Manage your agricultural products and track bids</p>
+            </div>
+            <a href="{% url 'add-product' %}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-2"></i>Add New Product
+            </a>
+        </div>
+    
+        <!-- Products Display -->
+        {% if products %}
+            <div class="row g-4">
+                {% for product in products %}
+                    <div class="col-lg-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="row g-0 h-100">
+                                <!-- Product Image -->
+                                <div class="col-md-4 bg-light p-0 d-flex align-items-center justify-content-center overflow-hidden" style="min-height: 220px;">
+                                    {% if product.image %}
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-100 h-100" style="object-fit: cover;">
+                                    {% else %}
+                                        <div class="text-center p-4">
+                                            <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
+                                            <p class="small text-muted mt-2">No image</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Product Details -->
+                                <div class="col-md-8">
+                                    <div class="card-body d-flex flex-column h-100">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title fw-bold text-primary">{{ product.name }}</h5>
+                                            <a href="{% url 'edit-product' product.id %}" class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-pencil-square"></i> Edit
+                                            </a>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span class="text-muted">Price:</span>
+                                                <span class="fw-bold">₹{{ product.price }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span class="text-muted">Available Quantity:</span>
+                                                <span class="fw-bold">{{ product.quantity }} kg</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span class="text-muted">Location:</span>
+                                                <span class="small">{{ product.location_name }}</span>
+                                                {% comment %} <span class="small">{{ product.lat }}, {{ product.lng }}</span> {% endcomment %}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Bid Section -->
+                                        <div class="mt-auto">
+                                            <h6 class="border-bottom pb-2">
+                                                <i class="bi bi-graph-up-arrow me-2"></i>Bids
+                                            </h6>
+                                            
+                                            {% if product.bids %}
+                                                <div class="bid-scroll" style="max-height: 150px; overflow-y: auto;">
+                                                    {% for bid in product.bids %}
+                                                        <div class="border-start border-3 {% if bid.is_selected %}border-success{% elif bid.is_expired %}border-danger{% else %}border-warning{% endif %} ps-3 mb-3">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <strong>{{ bid.buyer.username }}</strong>
+                                                                {% comment %} <span class="badge {% if bid.is_selected %}bg-success{% elif bid.is_expired %}bg-danger{% else %}bg-warning{% endif %}">
+                                                                    {% if bid.is_selected %}Selected{% elif bid.is_expired %}Expired{% else %}Pending{% endif %}
+                                                                </span> {% endcomment %}
+                                                                <span class="badge 
+                                                                    {% if bid.status == 'approved' %}bg-success
+                                                                    {% elif bid.status == 'rejected' or bid.is_expired %}bg-danger
+                                                                    {% else %}bg-warning{% endif %}">
+                                                                    {% if bid.status == 'approved' %}Approved
+                                                                    {% elif bid.status == 'rejected' %}Rejected
+                                                                    {% elif bid.is_expired %}Expired
+                                                                    {% else %}Pending{% endif %}
+                                                                </span>
+                                                            </div>
+                                                            <div class="small text-muted">
+                                                                ₹{{ bid.offered_price }} for {{ bid.quantity }} kg
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                <p class="text-muted fst-italic small">No bids yet.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="text-center py-5 my-4">
+                <div class="py-5">
+                    <i class="bi bi-basket text-muted" style="font-size: 5rem;"></i>
+                    <h3 class="mt-4">No products listed yet</h3>
+                    <p class="text-muted">Start selling by adding your first product</p>
+                    <a href="{% url 'add-product' %}" class="btn btn-primary mt-3">
+                        <i class="bi bi-plus-circle me-2"></i>Add Your First Product
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+
+{% endblock content %}

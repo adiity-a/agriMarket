@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            Commodity: <input type="text" name="commodity"><br>
+            State: <input type="text" name="state"><br>
+            District: <input type="text" name="district"><br>
+            Season: <input type="text" name="season"><br>
+            Month (1-12): <input type="number" name="month"><br>
+            <button type="submit">Predict</button>
+          </form>
+    </div>
+    <div>
+        <h2>Predicted Price: ₹{{ price | default:"0" }}</h2>
+<a href="{% url 'predict_price' %}">Try another prediction</a>
+    </div>
+</body>
+</html>

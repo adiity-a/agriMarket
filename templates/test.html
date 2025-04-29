@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Price Predictor</title>
+</head>
+<body>
+    <h2>Predict Modal Price</h2>
+    <form method="post" action="{% url 'predict_price' %}">
+        {% csrf_token %}
+        <label>State:</label>
+        <input type="text" name="state" required><br><br>
+
+        <label>District:</label>
+        <input type="text" name="district" required><br><br>
+
+        <label>Commodity:</label>
+        <input type="text" name="commodity" required><br><br>
+
+        <label>Month (1-12):</label>
+        <input type="number" name="month" min="1" max="12" required><br><br>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if predicted_price %}
+        <h3>Predicted Price: ₹{{ predicted_price }}</h3>
+        <p><strong>State:</strong> {{ state }}</p>
+        <p><strong>District:</strong> {{ district }}</p>
+        <p><strong>Commodity:</strong> {{ commodity }}</p>
+        <p><strong>Month:</strong> {{ month }}</p>
+        <p><strong>Season:</strong> {{ season }}</p>
+    {% endif %}
+</body>
+</html>
