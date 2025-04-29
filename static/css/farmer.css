@@ -1,0 +1,106 @@
+body{
+    padding-top: 70px;
+}
+
+.card {
+    transition: transform 0.2s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Scrollbar styling for bid section */
+.bid-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+.bid-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.bid-scroll::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.bid-scroll::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+.form-floating > .form-control,
+    .form-floating > .form-select {
+        height: calc(3.5rem + 2px);
+        line-height: 1.25;
+    }
+    
+    .form-floating > label {
+        padding: 1rem 0.75rem;
+    }
+    
+    /* Fix textarea height in floating labels */
+    .form-floating > textarea.form-control {
+        height: 120px;
+    }
+
+
+/*  */
+
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+}
+
+.card-form {
+    background-color: white;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 600px;
+}
+
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    width: 130px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.form-control {
+    height: 45px;
+    border-radius: 12px;
+}
+
+.btn-submit {
+    background-color: #212529;
+    color: white;
+    border-radius: 12px;
+    height: 45px;
+    font-weight: 500;
+    width: 100%;
+    transition: 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #000000;
+}
+
+p.text-muted {
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+}

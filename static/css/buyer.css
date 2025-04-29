@@ -1,0 +1,325 @@
+body{
+    padding-top: 70px;
+}
+
+/* AgriMarket My Bids Page Styling */
+.my-bids-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.bids-header {
+    margin-bottom: 30px;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    color: #1e7e34;
+    font-weight: 600;
+}
+
+.page-description {
+    color: #666;
+    margin: 0;
+}
+
+.bids-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    position: relative;
+    color: #666;
+}
+
+.tab-button.active {
+    color: #1e7e34;
+    font-weight: 500;
+}
+
+.tab-button.active:after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #1e7e34;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.bids-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.bid-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bid-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.bid-details {
+    padding: 15px;
+}
+
+.product-name {
+    font-size: 1.25rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #1e7e34;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.label {
+    color: #666;
+    font-weight: 500;
+}
+
+.value {
+    font-weight: 400;
+    text-align: right;
+}
+
+.status-badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-badge.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.accepted {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.completed {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.bid-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.edit-btn, .remove-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.edit-btn {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.edit-btn:hover {
+    background-color: #dde2e6;
+}
+
+.remove-btn {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.remove-btn:hover {
+    background-color: #f5c6cb;
+}
+
+.no-bids-message {
+    text-align: center;
+    padding: 40px 0;
+    color: #666;
+}
+
+.browse-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #1e7e34;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.browse-btn:hover {
+    background-color: #218838;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 4px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.submit-btn {
+    background-color: #1e7e34;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.cancel-btn {
+    background-color: #e9ecef;
+    color: #495057;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background-color: #dde2e6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .bids-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 15% auto;
+    }
+}
+

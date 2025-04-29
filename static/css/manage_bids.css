@@ -1,0 +1,42 @@
+body{
+    padding-top: 70px;
+}
+
+/* Ensure consistent column widths */
+.manage-bids-table th,
+.manage-bids-table td {
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* Lock widths based on expected content */
+.manage-bids-table th:nth-child(1), /* Buyer */
+.manage-bids-table td:nth-child(1) {
+    width: 120px;
+}
+
+.manage-bids-table th:nth-child(2), /* Offered Price */
+.manage-bids-table td:nth-child(2) {
+    width: 130px;
+}
+
+.manage-bids-table th:nth-child(3), /* Quantity */
+.manage-bids-table td:nth-child(3) {
+    width: 100px;
+}
+
+.manage-bids-table th:nth-child(4), /* Status */
+.manage-bids-table td:nth-child(4) {
+    width: 120px;
+}
+
+.manage-bids-table th:nth-child(5), /* Actions */
+.manage-bids-table td:nth-child(5) {
+    width: 180px;
+}
+
+/* Ensure No Actions button doesn't shrink */
+.btn[disabled] {
+    min-width: 140px;
+}
